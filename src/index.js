@@ -32,13 +32,18 @@ app.get("/auth", async (req, res) => {
     }
   );
 
-  fs.writeFile(
-    path.join(__dirname, "data.json"),
-    JSON.stringify(data),
-    (err) => {}
+  const { access_token } = data;
+
+  const { data: data2 } = await axios.get(
+    "https://sso.gov.mn/oauth2/api/v1/service",
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
   );
 
-  res.json(data);
+  res.json(data2);
 });
 
 app.post("/trigger", async (req, res) => {
