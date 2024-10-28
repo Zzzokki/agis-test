@@ -15,22 +15,22 @@ app.get("/auth", (req, res) => {
   res.send("Hello");
 });
 
-const req = [
-  {
-    services: ["WS100101_getCitizenIDCardInfo"],
-    wsdl: "https://xyp.gov.mn/citizen-1.5.0/ws?WSDL",
-    params: {
-      WS100101_getCitizenIDCardInfo: {
-        regnum: "УХ96091670",
-      },
-    },
-  },
-];
-
-const base64 = btoa(JSON.stringify(req));
-
 app.post("/trigger", async (req, res) => {
   try {
+    const x = [
+      {
+        services: ["WS100101_getCitizenIDCardInfo"],
+        wsdl: "https://xyp.gov.mn/citizen-1.5.0/ws?WSDL",
+        params: {
+          WS100101_getCitizenIDCardInfo: {
+            regnum: "УХ96091670",
+          },
+        },
+      },
+    ];
+
+    const base64 = btoa(JSON.stringify(x));
+
     const { data } = await axios.get(
       "https://www.sso.gov.mn/oauth2/authorize",
       {
