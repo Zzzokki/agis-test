@@ -16,6 +16,19 @@ app.get("/", (req, res) => {
 app.get("/auth", async (req, res) => {
   const { code } = req.query;
 
+  fs.writeFile(
+    path.join(__dirname, "datag.json"),
+    JSON.stringify(req.query),
+    (err) => {
+      if (err) {
+        console.error("Error writing to file", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+      res.send("Data saved successfully");
+    }
+  );
+
   const { data } = await axios.post(
     "https://sso.gov.mn/oauth2/token",
     {
