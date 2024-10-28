@@ -3,6 +3,9 @@ require("dotenv").config();
 const { encode } = require("js-base64");
 const { default: axios } = require("axios");
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
 const app = express();
 const port = 3000;
 
@@ -11,7 +14,17 @@ app.get("/", (req, res) => {
 });
 
 app.get("/auth", (req, res) => {
-  console.log(req);
+  const data = JSON.stringify(req.query, null, 2);
+  const filePath = path.join(__dirname, "request_data.json");
+
+  fs.writeFile(filePath, data, (err) => {
+    if (err) {
+      console.error("Error writing to file", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    console.log("Request data written to file");
+  });
 
   res.send("Hello");
 });
