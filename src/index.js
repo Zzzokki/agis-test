@@ -13,18 +13,34 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/auth", (req, res) => {
-  const data = JSON.stringify(req.query, null, 2);
-  const filePath = path.join(__dirname, "request_data.json");
+app.get("/auth", async (req, res) => {
+  const { code } = req.query;
 
-  fs.writeFile(filePath, data, (err) => {
-    if (err) {
-      console.error("Error writing to file", err);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-    console.log("Request data written to file");
+  const { data } = await axios.post("sso.gov.mn/oauth2/token", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    params: {
+      grant_type: "authorization_code",
+      code,
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      redirect_uri: process.env.REDIRECT_URI,
+    },
   });
+
+  fs.writeFile(
+    path.join(__dirname, "data.json"),
+    JSON.stringify(data),
+    (err) => {
+      if (err) {
+        console.error("Error writing to file", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+      res.send("Data saved successfully");
+    }
+  );
 
   res.send("Hello");
 });
