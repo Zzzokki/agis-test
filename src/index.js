@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const { encode } = require("js-base64");
 const { default: axios } = require("axios");
 const express = require("express");
 const app = express();
@@ -28,7 +29,7 @@ app.post("/trigger", async (req, res) => {
     },
   ];
 
-  const base64 = btoa(JSON.stringify(x));
+  const base64 = encode(JSON.stringify(x));
 
   try {
     const { data } = await axios.get(
