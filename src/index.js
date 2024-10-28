@@ -42,7 +42,7 @@ app.get("/auth", async (req, res) => {
     (err) => {}
   );
 
-  res.send("Hello");
+  res.json(data);
 });
 
 app.post("/trigger", async (req, res) => {
