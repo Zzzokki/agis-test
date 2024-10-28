@@ -32,18 +32,15 @@ app.post("/trigger", async (req, res) => {
   const base64 = encode(JSON.stringify(x));
 
   try {
-    const { data } = await axios.get(
-      "https://www.sso.gov.mn/oauth2/authorize",
-      {
-        params: {
-          response_type: "code",
-          client_id: process.env.CLIENT_ID,
-          redirect_uri: process.env.REDIRECT_URI,
-          scope: base64,
-          state: "1",
-        },
-      }
-    );
+    const { data } = await axios.get("https://sso.gov.mn/oauth2/authorize", {
+      params: {
+        response_type: "code",
+        client_id: process.env.CLIENT_ID,
+        redirect_uri: process.env.REDIRECT_URI,
+        scope: base64,
+        state: "1",
+      },
+    });
 
     res.json(data);
   } catch (error) {
