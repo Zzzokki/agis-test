@@ -16,6 +16,8 @@ app.get("/auth", (req, res) => {
 });
 
 app.post("/trigger", async (req, res) => {
+  var base64;
+
   try {
     const x = [
       {
@@ -29,7 +31,7 @@ app.post("/trigger", async (req, res) => {
       },
     ];
 
-    const base64 = btoa(JSON.stringify(x));
+    base64 = btoa(JSON.stringify(x));
 
     const { data } = await axios.get(
       "https://www.sso.gov.mn/oauth2/authorize",
@@ -48,7 +50,12 @@ app.post("/trigger", async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+      base64,
+      a: process.env.CLIENT_ID,
+      b: process.env.REDIRECT_URI,
+    });
   }
 });
 
