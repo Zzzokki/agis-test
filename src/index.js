@@ -43,7 +43,11 @@ app.get("/auth", async (req, res) => {
     }
   );
 
-  res.json(data2);
+  const { image } = data2[0];
+
+  res.send(
+    `<img src="data:image/png;base64, ${image}" style="width:300px;height:300px"  />`
+  );
 });
 
 app.post("/trigger", async (req, res) => {
