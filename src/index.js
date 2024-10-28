@@ -16,18 +16,22 @@ app.get("/", (req, res) => {
 app.get("/auth", async (req, res) => {
   const { code } = req.query;
 
-  const { data } = await axios.post("sso.gov.mn/oauth2/token", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    params: {
-      grant_type: "authorization_code",
-      code,
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: process.env.REDIRECT_URI,
-    },
-  });
+  const { data } = await axios.post(
+    "https://sso.gov.mn/oauth2/token",
+    {},
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        grant_type: "authorization_code",
+        code,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        redirect_uri: process.env.REDIRECT_URI,
+      },
+    }
+  );
 
   fs.writeFile(
     path.join(__dirname, "data.json"),
